@@ -1,0 +1,116 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Table {
+  id               String         @id @default(uuid())
+  number           Int            @unique
+  qrToken          String         @unique
+  status           String         @default("AVAILABLE") // AVAILABLE, OCCUPIED, AWAITING_PAYMENT
+  currentSessionId String?
+  sessions         TableSession[]
+  orders           Order[]
+}
+
+model TableSession {
+  id        String        @id @default(uuid())
+  tableId   String
+  table     Table         @relation(fields: [tableId], references: [id])
+  startedAt DateTime      @default(now())
+  endedAt   DateTime?
+  status    String        @default("ACTIVE") // ACTIVE, CLOSED
+  orders    Order[]
+  bills     Bill[]
+}
+
+model MenuCategory {
+  id        String     @id @default(uuid())
+  name      String
+  sortOrder Int        @default(0)
+  items     MenuItem[]
+}
+
+model MenuItem {
+  id                 String         @id @default(uuid())
+  categoryId         String
+  category           MenuCategory   @relation(fields: [categoryId], references: [id])
+  name               String
+  description        String?
+  price              Float
+  imageUrl           String?
+  isAvailable        Boolean        @default(true)
+  stockQty           Int            @default(0)
+  lowStockThreshold  Int            @default(5)
+  orderItems         OrderItem[]
+  inventoryLogs      InventoryLog[]
+}
+
+model Order {
+  id        String      @id @default(uuid())
+  sessionId String
+  session   TableSession @relation(fields: [sessionId], references: [id])
+  tableId   String
+  table     Table       @relation(fields: [tableId], references: [id])
+  status    String      @default("PLACED") // PLACED, ACCEPTED, PREPARING, READY, SERVED, CANCELLED
+  createdAt DateTime    @default(now())
+  notes     String?
+  items     OrderItem[]
+}
+
+model OrderItem {
+  id         String   @id @default(uuid())
+  orderId    String
+  order      Order    @relation(fields: [orderId], references: [id])
+  menuItemId String
+  menuItem   MenuItem @relation(fields: [menuItemId], references: [id])
+  quantity   Int
+  unitPrice  Float
+  subtotal   Float
+}
+
+model Bill {
+  id          String      @id @default(uuid())
+  sessionId   String
+  session     TableSession @relation(fields: [sessionId], references: [id])
+  totalAmount Float
+  taxAmount   Float
+  status      String      @default("PENDING") // PENDING, PAID, FAILED
+  paymentId   String?
+  paidAt      DateTime?
+  payments    Payment[]
+}
+
+model Payment {
+  id                 String   @id @default(uuid())
+  billId             String
+  bill               Bill     @relation(fields: [billId], references: [id])
+  provider           String
+  providerRefId      String?
+  amount             Float
+  status             String
+  rawWebhookPayload  String?
+  createdAt          DateTime @default(now())
+}
+
+model StaffUser {
+  id           String @id @default(uuid())
+  name         String
+  email        String @unique
+  passwordHash String
+  role         String @default("STAFF") // STAFF, ADMIN
+}
+
+model InventoryLog {
+  id         String   @id @default(uuid())
+  menuItemId String
+  menuItem   MenuItem @relation(fields: [menuItemId], references: [id])
+  orderId    String?
+  changeQty  Int
+  reason     String
+  createdAt  DateTime @default(now())
+}
