@@ -6,7 +6,7 @@ A modern, QR-based restaurant ordering and billing system designed for high-volu
 [![Database](https://img.shields.io/badge/Database-Supabase-green?logo=supabase)](https://supabase.com/)
 
 ## 🚀 Live Demo
-- **Deployed Application:** [Insert Vercel URL Here]
+- **Deployed Application:** [https://qr-git-main-shrey005.vercel.app](https://qr-git-main-shrey005.vercel.app)
 - *[Add demo GIF here]*
 
 ## 📖 Overview
