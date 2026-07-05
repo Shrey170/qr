@@ -40,3 +40,13 @@
 - [x] 38. Polish: Responsive design, empty states, loading skeletons.
 - [x] 39. Documentation: Write README.md (Setup, env vars, docker-compose).
 - [x] 40. Final Review: Verify all acceptance criteria from DoD.
+
+## Deployment Fix Loop — Started 2026-07-05T14:05:58+05:30
+
+- Iteration 1: Diagnosed missing DIRECT_URL, non-URL-encoded Supabase password, and missing `prisma migrate deploy` in Vercel build script. Applied fixes. Verified locally with `npm run build` which succeeded.
+
+## BLOCKED — Needs Human Input
+
+- **Exact remaining error:** Cannot proceed to deploy to Vercel.
+- **What was tried:** Attempted to run Vercel CLI commands (`vercel ls`, `vercel --prod`) but was prompted for authentication ("No existing credentials found. Starting login flow...").
+- **What you suspect but can't confirm:** I suspect the project is successfully fixed and will deploy smoothly, but I need a `VERCEL_TOKEN` environment variable or for you to authenticate the Vercel CLI locally so that I can execute `vercel --prod` and verify the deployment.
