@@ -1,6 +1,8 @@
 import prisma from "@/lib/prisma";
 import { CustomerMenuClient } from "./CustomerMenuClient";
 
+import { getBaseUrl } from "@/lib/utils";
+
 interface PageProps {
   params: {
     tableId: string;
@@ -12,7 +14,7 @@ export default async function TableSessionPage({ params }: PageProps) {
   const { tableId, qrToken } = params;
 
   // Validate the QR token and create/resume a session.
-  const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000';
+  const baseUrl = getBaseUrl();
   const res = await fetch(`${baseUrl}/api/tables/${tableId}/scan`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },

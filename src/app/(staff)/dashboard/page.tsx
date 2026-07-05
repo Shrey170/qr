@@ -3,7 +3,7 @@ import { StaffOrdersClient } from "./StaffOrdersClient";
 export const dynamic = 'force-dynamic';
 
 export default async function StaffDashboardPage() {
-  const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000';
+  // No baseUrl needed
   
   // We cannot easily fetch using standard fetch with auth headers in RSC without passing cookies.
   // Instead, fetch directly from DB or pass initialData from DB.

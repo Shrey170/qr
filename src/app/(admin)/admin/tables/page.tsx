@@ -2,11 +2,13 @@ import prisma from "@/lib/prisma";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import QRCode from "react-qr-code";
 
+import { getBaseUrl } from "@/lib/utils";
+
 export const dynamic = 'force-dynamic';
 
 export default async function AdminTablesPage() {
   const tables = await prisma.table.findMany({ orderBy: { number: 'asc' }});
-  const baseUrl = process.env.NEXTAUTH_URL || "http://localhost:3000";
+  const baseUrl = getBaseUrl();
 
   return (
     <div className="space-y-6">
