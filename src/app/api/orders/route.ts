@@ -92,6 +92,9 @@ export async function POST(request: Request) {
       }
 
       return order;
+    }, {
+      maxWait: 15000,
+      timeout: 30000,
     });
 
     try {
